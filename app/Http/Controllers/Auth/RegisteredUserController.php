@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Silber\Bouncer\BouncerFacade as Bouncer;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+
 
 class RegisteredUserController extends Controller
 {
@@ -41,10 +43,16 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+
         event(new Registered($user));
+
+        Bouncer::assign('user')->to($user);
+
 
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
     }
+
+
 }

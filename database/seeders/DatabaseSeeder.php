@@ -50,25 +50,34 @@ class DatabaseSeeder extends Seeder
 //        // Dodela uloge 'admin' korisniku
 //        Bouncer::assign('admin')->to($admin);
 
-        // Kreiranje admina
-        $manager01 = User::create([
-            'name' => 'manager01',
-            'email' => 'manager01@example.com',
-            'password' => Hash::make('password'),
-        ]);
+//
+//        $manager01 = User::create([
+//            'name' => 'manager01',
+//            'email' => 'manager01@example.com',
+//            'password' => Hash::make('password'),
+//        ]);
+//
+//        // Dodela uloge 'admin' korisniku
+//        Bouncer::assign('manager')->to($manager01);
+//
+//
+//        $user01 = User::create([
+//            'name' => 'User',
+//            'email' => 'user@example.com',
+//            'password' => Hash::make('password'),
+//        ]);
+//
+//        // Dodela uloge 'admin' korisniku
+//        Bouncer::assign('user')->to($user01);
 
-        // Dodela uloge 'admin' korisniku
-        Bouncer::assign('manager')->to($manager01);
-
-
-        $user01 = User::create([
-            'name' => 'User',
-            'email' => 'user@example.com',
-            'password' => Hash::make('password'),
-        ]);
-
-        // Dodela uloge 'admin' korisniku
-        Bouncer::assign('user')->to($user01);
+//        $admin01 = User::create([
+//            'name' => 'Admin01',
+//            'email' => 'admin01@example.com',
+//            'password' => Hash::make('password'),
+//        ]);
+//
+//        // Dodela uloge 'admin' korisniku
+//        Bouncer::assign('admin')->to($admin01);
     }
 
     // admin 1

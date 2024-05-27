@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+    <!-- Dodajemo Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Možete dodati svoje prilagođene stilove ovde */
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-5 mb-4">All Users</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <!-- Dodajte dodatne zaglavlja kolona prema potrebi -->
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($users as $user)
+                <tr>
+                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->email }}</td>
+                    <!-- Dodajte dodatne kolone prema potrebi -->
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Dodajemo Bootstrap JavaScript i jQuery (opciono) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
