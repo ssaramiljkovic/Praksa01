@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
-use Bouncer;
+use Silber\Bouncer\BouncerFacade as Bouncer;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class User extends Authenticatable
 {
@@ -21,6 +24,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'mobile_number',
         'password',
     ];
 
@@ -33,6 +37,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
 
     /**
      * Get the attributes that should be cast.
@@ -62,5 +67,18 @@ class User extends Authenticatable
     public function isUser()
     {
         return $this->isAn('user');
+    }
+
+    // Metod za kreiranje novog admina
+    public static function createAdmin($data)
+    {
+        // Provera da li već postoji admin u bazi
+        if (static::where('admin', true)->exists()) {
+            // Već postoji admin, ne dozvoli kreiranje novog admina
+            return null;
+        }
+
+        // Kreiranje novog admina
+        return static::create(array_merge($data, ['admin' => true]));
     }
 }

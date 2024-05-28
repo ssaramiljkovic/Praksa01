@@ -21,17 +21,25 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-        Bouncer::define('admin', function ($user) {
-            return $user->isAdmin();
+//        Bouncer::define('admin', function ($user) {
+//            return $user->isAdmin();
+//        });
+//
+//        Bouncer::define('user', function ($user) {
+//            return $user->isUser();
+//        });
+//
+//        Bouncer::define('manager', function ($user) {
+//            return $user->isManager();
+//        });
+
+        Bouncer::define('delete-users', function ($user) {
+            return !$user->isAdmin();
         });
 
-        Bouncer::define('user', function ($user) {
-            return $user->isUser();
-        });
 
-        Bouncer::define('manager', function ($user) {
-            return $user->isManager();
-        });
+        // Definišemo dozvolu za ažuriranje korisnika
+        Bouncer::allow('admin')->to(['edit-users', 'update-users', 'delete-users', 'create-managers']);
 
 //        Bouncer::allow('admin')->to(['add-parking-lot', 'edit-parking-lot', 'add-user', 'manage-user', 'view-statistics']);
 //        Bouncer::allow('user')->to(['reserve-parking', 'view-reservations', 'view-parking-lots', 'view-profile', 'cancel-reservation']);

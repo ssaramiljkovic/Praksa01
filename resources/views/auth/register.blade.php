@@ -20,6 +20,17 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Mobile Number -->
+        <div class="mt-4">
+            <x-input-label for="mobile_number" :value="__('Mobile Number')" />
+
+            <x-text-input id="mobile_number" class="block mt-1 w-full"
+                          type="text"
+                          name="mobile_number"
+                          :value="old('mobile_number')"
+                          required autofocus />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
@@ -43,7 +54,7 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-content-between mt-4">
+        <div class="flex items-center justify-content-center mt-4">
 {{--            <a class="underline text-sm text-black dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">--}}
 {{--                {{ __('Already registered?') }}--}}
 {{--            </a>--}}

@@ -23,6 +23,8 @@ Route::post('/admin/store-manager', [UserController::class, 'storeManager'])->na
 
 
 Route::get('/see-users', [UserController::class, 'seeUsers'])->name('see-users');
-
+Route::get('/users/{id}/edit', [UserController::class, 'editUser'])->name('users.edit');
+Route::post('/users/{user}', [UserController::class, 'update'])->name('users.update');
+Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
 require __DIR__.'/auth.php';

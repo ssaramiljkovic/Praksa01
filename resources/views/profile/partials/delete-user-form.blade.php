@@ -9,11 +9,42 @@
         </p>
     </header>
 
-    <x-danger-button
-        class="bg-dark"
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+
+{{--    x-data="{{ auth()->user()->isAdmin() ? '' : 'x-on:click.prevent' }} tx-on:click='$dispatch('open-modal', 'confirm-user-deletion')"--}}
+
+    <form method="post" action="{{ route('users.destroy', auth()->user()) }}" class="p-6">
+        @csrf
+        @method('delete')
+
+        <!-- Provera da li je korisnik admin, ako jeste, blokiraj open-modal -->
+        @if(auth()->user()->isAdmin())
+            <x-danger-button class="bg-dark" >{{ __('Delete Account') }}</x-danger-button>
+        @else
+            <!-- Ako nije admin, omogući open-modal -->
+            <x-danger-button class="bg-dark"
+                             x-data=""
+                             x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
+            >{{ __('Delete Account') }}</x-danger-button>
+        @endif
+    </form>
+
+
 
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
