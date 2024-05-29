@@ -19,7 +19,9 @@
             <thead>
             <tr>
                 <th>Name</th>
+{{--                <th>Role</th>--}}
                 <th>Email</th>
+                <th>Mobile number</th>
                 <!-- Dodajte dodatne zaglavlja kolona prema potrebi -->
             </tr>
             </thead>
@@ -27,7 +29,9 @@
             @foreach($users as $user)
                 <tr>
                     <td>{{ $user->name }}</td>
+{{--                    <td>{{ $user->role }}</td>--}}
                     <td>{{ $user->email }}</td>
+                    <td>{{ $user->mobile_number }}</td>
                     @if (Bouncer::can('edit-users'))
                     <td>
                         <a href="{{ route('users.edit', ['id' => $user->id]) }}" class="btn btn-light">

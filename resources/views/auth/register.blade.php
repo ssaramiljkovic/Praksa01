@@ -28,7 +28,7 @@
                           type="text"
                           name="mobile_number"
                           :value="old('mobile_number')"
-                          required autofocus />
+                           />
         </div>
 
         <!-- Password -->

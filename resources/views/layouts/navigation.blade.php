@@ -42,16 +42,42 @@
                             </x-dropdown-link>
 
 
-                            <x-dropdown-link :href="route('dashboard')">
-                                {{ __('Delete manager') }}
-                            </x-dropdown-link>
-
                             <x-dropdown-link :href="route('see-users')">
                                 {{ __('See users') }}
                             </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                 @endif
+
+                @if(Bouncer::can('create-categories'))
+                        <x-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                <button class="inline-flex items-center px-3 mx-3 py-2 border border-transparent text-sm
+                                leading-4 font-medium rounded-md text-white dark:text-gray-400 bg-primary dark:bg-gray-800
+                                hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                    <div class="fw-bold">Vehicle Category</div>
+
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('categories.create')">
+                                    {{ __('Add Category') }}
+                                </x-dropdown-link>
+
+
+                                <x-dropdown-link :href="route('categories.manage')">
+                                    {{ __('Manage Categories') }}
+                                </x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                @endif
+
                     @if(Bouncer::is(Auth::user())->an('manager'))
                         <x-dropdown align="right" width="48">
                             <x-slot name="trigger">

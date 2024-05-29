@@ -49,9 +49,17 @@
             <select id="role" name="role" class="form-control">
                 <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                 <option value="manager" {{ $user->role == 'manager' ? 'selected' : '' }}>Manager</option>
-{{--                <option value="student" {{ $user->role == 'student' ? 'selected' : '' }}>Student</option>--}}
-{{--                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>--}}
+                <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
             </select>
+{{--                <div>--}}
+{{--                    <label><input type="radio" name="role" value="User" {{ $user->role == 'User' ? 'checked' : '' }}> User</label>--}}
+{{--                    <label><input type="radio" name="role" value="Manager" {{ $user->role == 'Manager' ? 'checked' : '' }}> Manager</label>--}}
+{{--                    <label><input type="radio" name="role" value="Admin" {{ $user->role == 'Admin' ? 'checked' : '' }}> Admin</label>--}}
+
+{{--                </div>--}}
+
+
+
         </div>
         <button type="submit" class="btn btn-primary">Update User</button>
     </form>
@@ -64,7 +72,7 @@
     </form>
 
     <div class="mt-3">
-        <a href="{{ route('dashboard')}}" class="btn btn-primary">Back</a>
+        <a href="{{ route('see-users')}}" class="btn btn-primary">Back</a>
     </div>
 
 </div>

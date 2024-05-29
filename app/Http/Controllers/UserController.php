@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -64,9 +65,16 @@ class UserController extends Controller
 
     public function seeUsers()
     {
-        $users = User::whereHas('roles', function ($query) {
-            $query->where('name', 'user');
-        })->get(['id','name', 'email', 'mobile_number']);
+//        $users = User::whereHas('roles', function ($query) {
+//            $query->where('name', 'user');
+//        })->get(['id','name', 'email', 'mobile_number']);
+
+        $users = User::all();
+
+//        $canEdit = Bouncer::can('edit-users');
+//        $canDelete = Bouncer::can('delete-users');
+//
+//        return view('see-users', compact('users', 'canEdit', 'canDelete',));
 
         // Iterirate kroz korisnike i postavite prazno polje ako je mobile_number null
         $users->transform(function ($user) {
@@ -79,6 +87,7 @@ class UserController extends Controller
 
     public function editUser($id)
     {
+
         if (!Bouncer::can('update-users')) {
             abort(403, 'Unauthorized action.');
         }
@@ -90,25 +99,49 @@ class UserController extends Controller
         return view('users.edit', compact('user'));
     }
 
-//    public function userUpdate(Request $request, $id)
+//    public function update(Request $request, User $user)
 //    {
-//        $validatedData = $request->validate([
-//            'name' => 'required|string|max:255',
-//            'mobile' => 'required|string|max:15',
-//            'role' => 'required|in:headmaster,professor,student',
-//        ]);
+//        // Provjeravamo da li je trenutno prijavljeni korisnik admin i pokušava promijeniti svoju ulogu
+//        if (Bouncer::is($user)->an('admin') && $user->id === Auth::id() && $request->role !== 'admin') {
+//            abort(403, 'Admin cannot change their own role');
+//        }
 //
-//        $user = User::findOrFail($id);
-//        $user->name = $validatedData['name'];
-//        $user->mobile = $validatedData['mobile'];
-//        $user->role = $validatedData['role'];
-//        $user->save();
+//        // Nastavljamo sa ažuriranjem korisnika ako nije admin ili ako nije ažuriranje uloge admina
+//        $user->update($request->only(['name', 'email', 'mobile_number']));
 //
-//        return redirect()->route('dashboard')->with('success', 'User updated successfully.');
+//        return redirect()->route('see-users');
 //    }
+//
+////    public function update(Request $request, User $user)
+////    {
+////        $request->validate([
+////            'name' => 'required|string|max:255',
+////            'role' => 'sometimes|string|in:admin,manager,user', // Adjust roles as needed
+////            'mobile_number' => 'nullable|string|max:15|regex:/^[0-9]*$/' // Validation rule for mobile number
+////        ]);
+////
+////        // Prevent updating email or username
+////        $data = $request->except(['email', 'username']);
+////
+////        // Prevent changing role to highest role
+////        if (!Bouncer::is($user)->an('Admin') && $request->role === 'admin') {
+////            return redirect()->back()->withErrors(['role' => 'You cannot change the role to admin.']);
+////        }
+////
+////        // Update user data
+////        $user->update($data);
+////
+////        // Update user role if necessary
+////        if ($request->has('role')) {
+////            Bouncer::sync($user)->roles([$request->role]);
+////        }
+////
+////        return redirect()->route('users.edit', $user)->with('success', 'User updated successfully.');
+////    }
 
     public function update(Request $request, User $user)
     {
+        //dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'role' => 'sometimes|string|in:admin,manager,user', // Adjust roles as needed
@@ -123,6 +156,10 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['role' => 'You cannot change the role to admin.']);
         }
 
+        if (Bouncer::is($user)->an('admin') && ($request->role == 'user' || $request->role == 'manager')) {
+            return redirect()->back()->withErrors(['role' => 'Admin cannot change their own role.']);
+        }
+
         // Update user data
         $user->update($data);
 
@@ -132,19 +169,37 @@ class UserController extends Controller
         }
 
         return redirect()->route('users.edit', $user)->with('success', 'User updated successfully.');
+
     }
 
-    public function destroy(User $user)
+//        // Provjeravamo da li je trenutno prijavljeni korisnik admin i pokušava promijeniti ulogu korisnika na admina
+//        if (Bouncer::is(Auth::user())->an('admin') && $request->role === 'admin') {
+//            return back()->with('error', 'You are not authorized to change user role to admin');
+//        }
+//
+//        // Nastavljamo sa ažuriranjem korisnika ako nije pokušavao promijeniti ulogu na admina
+//        $user->update($request->only(['name', 'mobile_number', 'role']));
+//
+//        return redirect()->route('users.edit', $user)->with('success', 'User updated successfully');
+
+
+    public function destroy(Request $request, User $user)
     {
         // Provera ovlašćenja: Samo admin može da obriše naloge, ali ne i svoj nalog
-        if ($user->id === auth()->id() && $user->isAdmin()) {
-            return redirect()->back()->withErrors(['message' => 'You cannot delete your own account.']);
+        if ($request->filled('role')) {
+            return redirect()->back()->withErrors(['message' => 'Admin cannot delete their own account.']);
+        }
+
+        // Provera ovlašćenja: Samo admin može da obriše naloge, ali ne i svoj nalog
+        if (Bouncer::is(auth()->user())->an('admin') && Bouncer::is($user)->an('admin')) {
+            return redirect()->back()->withErrors(['message' => 'Cannot delete admin account.']);
         }
 
         // Brisanje naloga
         $user->delete();
 
-        return redirect()->route('dashboard')->with('success', 'User deleted successfully.');
+        return redirect()->route('see-users')->with('success', 'User deleted successfully.');
     }
+
 
 }

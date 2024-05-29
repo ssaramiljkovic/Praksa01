@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $adminRole = Bouncer::role()->firstOrCreate(['name' => 'admin']);
+        $managerRole = Bouncer::role()->firstOrCreate(['name' => 'manager']);
+        $userRole = Bouncer::role()->firstOrCreate(['name' => 'user']);
         // User::factory(10)->create();
 
 //        User::factory()->create([
@@ -59,25 +62,28 @@ class DatabaseSeeder extends Seeder
 //
 //        // Dodela uloge 'admin' korisniku
 //        Bouncer::assign('manager')->to($manager01);
-//
-//
+
+
 //        $user01 = User::create([
 //            'name' => 'User',
 //            'email' => 'user@example.com',
 //            'password' => Hash::make('password'),
 //        ]);
 //
-//        // Dodela uloge 'admin' korisniku
 //        Bouncer::assign('user')->to($user01);
 
-//        $admin01 = User::create([
-//            'name' => 'Admin01',
-//            'email' => 'admin01@example.com',
+//        $admin02 = User::create([
+//            'name' => 'Admin02',
+//            'email' => 'admin02@example.com',
 //            'password' => Hash::make('password'),
 //        ]);
 //
 //        // Dodela uloge 'admin' korisniku
-//        Bouncer::assign('admin')->to($admin01);
+//        Bouncer::assign('admin')->to($admin02);
+
+        // Definišemo dozvolu za ažuriranje korisnika
+        Bouncer::allow('admin')->to(['edit-users', 'update-users', 'delete-users', 'create-managers', 'create-categories', 'manage-categories']);
+//        Bouncer::allow('manager')->to(['create-categories']);
     }
 
     // admin 1
